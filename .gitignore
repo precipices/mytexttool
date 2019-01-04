@@ -1,0 +1,11 @@
+#过滤整个文件夹
+/target/
+/.settings/
+/font/
+/BDF工具/
+/temp/
+/upload/
+/download/
+#过滤所有.log后缀名的文件
+*.log
+

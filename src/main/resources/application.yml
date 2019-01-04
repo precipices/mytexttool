@@ -1,0 +1,37 @@
+#以下为程序的默认配置
+#注意分隔用的是空格，不是制表符
+server:
+    port: 8080
+#禁止thymeleaf缓存（建议：开发环境设置为false，生成环境设置为true）
+spring:
+    thymeleaf:
+        cache: false
+    server:
+        maxFileSize: 20MB
+        maxRequestSize: 100MB
+#    devtools:
+#        restart:
+#            #热部署生效
+#          enabled: true
+#            #设置重启的目录
+#            #additional-paths: src/main/java
+#            #classpath目录下的WEB-INF文件夹内容修改不重启
+#          exclude: WEB-INF/**
+author:
+    name: kai.wu
+#以下是初始时字体字号的默认配置，可按需求更改
+default:
+    #默认单元格宽度（单位为px）
+    defaultWidth: 150
+    #网页的默认字号（单位为px）
+    defaultFontsize: 16
+    #网页的默认字体
+    defaultFonttype: 宋体
+    #网页支持的所有字号（单位为px）
+    fontsizeFamily: [ 12 , 16 , 24  ]
+    #网页支持的所有字体
+    fontFamily: [宋体,楷体,华文行楷,微软雅黑,Arial,Book Antiqua,Webdings,Pecita,Gotham Rounded,Gotham Round Light,Gotham Rounded 细体]
+    #要打开的BDF文件生成工具所在位置(相对路径)
+    BDFExePath: BDF工具/点阵字库生成器/ts3.exe
+    #要打开的BDF文件查看工具所在位置(相对路径)
+    BDFReaderExePath: BDF工具/bdf查看编辑器/BdfEditor.exe

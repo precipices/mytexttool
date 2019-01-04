@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<!-- 为了让 Bootstrap 开发的网站对移动设备友好，确保适当的绘制和触屏缩放，需要在网页的 head 之中添加 viewport meta 标签，如下所示： -->
+<!-- width 属性控制设备的宽度。假设您的网站将被带有不同屏幕分辨率的设备浏览，那么将它设置为 device-width 可以确保它能正确呈现在不同设备上。 -->
+<!-- initial-scale=1.0 确保网页加载时，以 1:1 的比例呈现，不会有任何的缩放。 -->
+<!-- 在移动设备浏览器上，通过为 viewport meta 标签添加 user-scalable=no 可以禁用其缩放（zooming）功能。 -->
+<meta name="viewport"
+	content="width=device-width, 
+                                     initial-scale=1.0, 
+                                     maximum-scale=1.0, 
+                                     user-scalable=no">
+<title>文件智能转换工具</title>
+<!--  Bootstrap 核心 CSS 文件 -->
+<!-- <link -->
+<!-- 	href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" -->
+<!-- 	rel="stylesheet"> -->
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<!-- <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script> -->
+<!--  Bootstrap 核心 JavaScript 文件 -->
+<!-- <script	src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+<!--  Bootstrap 核心 CSS 文件 -->
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="/js/jquery.min.js"></script>
+<!--  Bootstrap 核心 JavaScript 文件 -->
+<script	src="/js/bootstrap.min.js"></script>
+<!-- <link href="/css/myfont.css" rel="stylesheet" /> -->
+<link href="/css/mytable.css" rel="stylesheet" />
+<script src="/js/listener.js"></script>
+<script src="/js/mytable.js"></script>
+<script src="/js/myUtil.js"></script>
+<script th:inline="javascript">
+var defaultWidth=/*[[${@ymlBean.defaultWidth}]]*/150;
+/**
+ * 初始化 修改默认字体字号
+ */
+$(function(){
+	var fonttype=/*[[${@ymlBean.defaultFonttype}]]*/'宋体';
+	var fontsize=/*[[${@ymlBean.defaultFontsize}]]*/'16';
+	$("body").css("font-size",fontsize+"px");
+	$("body").css("font-family",fonttype);
+	$("#wordsize").val(fontsize);
+	$("#wordfont").val(fonttype);
+
+// 	uploadType="DTC";
+// 	importExcel("D:\\软件工作站点\\测试和学习\\学习mybatis\\mytexttool\\upload\\3to1_DCM.xlsx");
+});
+</script>
+</head>
+<body>
+	<div class="container" style="border: 1px solid green;">
+		<h1>文件智能转换工具</h1>
+		<!-- 		菜单 -->
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#">开始</a></li>
+			<li class="dropdown" data-toggle="tooltip" data-placement="top"
+				title="载入需要操作的Excel文件 "><a class="dropdown-toggle"
+				data-toggle="dropdown" href="#"> 载入<span class="caret"></span>
+			</a>
+				<ul class="dropdown-menu">
+					<li><a href="#" onclick="uploadDTCExcel()">载入DTC格式Excel</a></li>
+					<li><a href="#" onclick="uploadExcel()">载入普通Excel</a></li>
+				</ul></li>
+			<li class="dropdown"><a class="dropdown-toggle"
+				data-toggle="dropdown" href="#"> 导出<span class="caret"></span>
+			</a>
+				<ul class="dropdown-menu">
+					<li><a href="#" onclick="downloadADTCXml()">当前表导出DTC格式XML</a></li>
+					<li><a href="#" onclick="downloadAllDTCXml()">全部表导出DTC格式XML</a></li>
+					<li><a href="#" onclick="downloadAXml()">当前表导出普通XML</a></li>
+					<li><a href="#" onclick="downloadAllXml()">全部表导出普通XML</a></li>
+				</ul></li>
+		</ul>
+		<div class="row" style="padding-top: 10px;">
+			<div class="col-md-3">
+				<div class="form-group row">
+					<label class="col-md-5" for="wordfont">工作表：</label> <select
+						id="workSheet" class="form-control col-md-7" style="width: 100px">
+						<option value="null">无工作表</option>
+					</select>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-5" for="selectScope">选择：</label> <select
+						id="selectScope" class="form-control col-md-7"
+						style="width: 100px">
+						<option value="0">格</option>
+						<option value="1">行</option>
+						<option value="2">列</option>
+						<option value="3">表</option>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group row">
+					<label class="col-md-5" for="wordfont">字体：</label> <select
+						id="wordfont" class="form-control col-md-7" style="width: 100px">
+						<option th:each="font:${@ymlBean.fontFamily}" th:value="${font}" th:text="${font}"></option>
+					</select>
+				</div>
+				<div class="form-group row">
+					<label class="col-md-5 control-label" for="wordsize">字号： </label>
+					<select id="wordsize" class="form-control col-md-7" style="width:100px">
+						<option th:each="size:${@ymlBean.fontsizeFamily}" th:value="${size}" th:text="${size + 'px'}"></option>
+					</select> 
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group row">
+					<label for="height" class="control-label col-md-5">高度： </label>
+					<div class="col-md-7">
+						<input id="height" class="form-control" type="text" />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="width" class="control-label col-md-5">宽度： </label>
+					<div class="col-md-7">
+						<input id="width" class="form-control" type="text" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group row">
+					<button type="button" id="BDFToolBtn" class="btn btn-primary" data-toggle="tooltip" data-placement="top"
+				title="如果BDF下载失败，表明系统内没有该BDF文件，使用该工具生成一个BDF。如果该字体为常用字体，建议保存到[程序目录/font]文件夹下,文件命名为[字体名_字号.bdf]">BDF生成工具</button>
+				</div>
+				<div class="form-group row">
+					<button type="button" id="BDFReaderBtn" class="btn btn-primary" data-toggle="tooltip" data-placement="top"
+				title="用于查看BDF的工具，也可以编辑个别文字">BDF查看工具</button>
+				</div>
+			</div>
+
+		</div>
+		<hr />
+		<div id="downloadDiv" class="row"
+			style="padding: 20px; border: 1px solid gray;"></div>
+		<div id="mytable" class="row table-responsive"
+			style="padding: 20px; border: 1px solid gray;">请导入Excel工作簿</div>
+	</div>
+	<!-- 	开始演示模态框 -->
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="importModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="importModalLabel">载入Excel文件</h4>
+				</div>
+				<div class="modal-body">
+					<form id="fileForm" name="fileForm" enctype="multipart/form-data"
+						method="post">
+						<input type="file" name="file" id="file" accept=".xls,.xlsx"  onchange="Javascript:validateType(this)"/>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+					</button>
+					<button type="button" id="uploadAndImportBtn"
+						class="btn btn-primary">提交</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+
+</body>
+
+</html>
