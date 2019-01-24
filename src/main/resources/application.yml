@@ -22,15 +22,15 @@ author:
 #以下是初始时字体字号的默认配置，可按需求更改
 default:
     #默认单元格宽度（单位为px）
-    defaultWidth: 150
+    defaultWidth: 390
     #网页的默认字号（单位为px）
     defaultFontsize: 16
     #网页的默认字体
     defaultFonttype: 宋体
     #网页支持的所有字号（单位为px）
-    fontsizeFamily: [ 12 , 16 , 24  ]
+    fontsizeFamily: [ 12 , 16 , 24,30  ]
     #网页支持的所有字体
-    fontFamily: [宋体,楷体,华文行楷,微软雅黑,Arial,Book Antiqua,Webdings,Pecita,Gotham Rounded,Gotham Round Light,Gotham Rounded 细体]
+    fontFamily: [宋体,楷体,华文行楷,微软雅黑,Gotham Rounded,Gotham Round Light]
     #要打开的BDF文件生成工具所在位置(相对路径)
     BDFExePath: BDF工具/点阵字库生成器/ts3.exe
     #要打开的BDF文件查看工具所在位置(相对路径)

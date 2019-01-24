@@ -8,7 +8,8 @@ var Util = {
 	getHeight : function(text,template) {
 		var sensor = $('<span>' + text + '</span>').css({
 			display : 'none',
-			"font-size":template.css("font-size")
+			"font-size":template.css("font-size"),
+			"font-family":template.css("font-family")
 		});
 		$('body').append(sensor);
 		var height = sensor.height();
@@ -19,7 +20,8 @@ var Util = {
 	getWidth : function(text,template) {
 		var sensor = $('<span>' + text + '</span>').css({
 			display : 'none',
-			"font-size":template.css("font-size")
+			"font-size":template.css("font-size"),
+			"font-family":template.css("font-family")
 		});
 		$('body').append(sensor);
 		var width = sensor.width();
@@ -154,33 +156,41 @@ var Util = {
 		}
 		// 判断切割点及前一个字符是否英文
 		if(this.isLetter(str.charAt(p-1)) && this.isLetter(str.charAt(p))){
-			// 得到切割点位置的单词及首末下标
-			var word=this.getWordOfChar(str,p);
-			/**
-			 * 3.英文复合词组换行时，必须在复合词连接符处换行，如果控件不足以显示前半个单词，则将整个复合词组换行显示
-			 */
-			// 判断切割点所在单词是否是复合词组
-			if(word.symPosition>=0){
-				// 如果是复合词组
-				// 足以显示前半个单词，将切割点移动到连接符后
-				if(word.symPosition<p)
-					p=word.symPosition+1;
-				// 不足以显示前半个单词，且头部下标不为0，将切割点移动到单词头部
-				else if(word.head>0){
-					p=word.head;
-				}
+			if(this.isLetter(str.charAt(p-2))){// 判断切割点前2位是否仍是英文字母
+				str=this.insertChar(str,p-1,"-");// 将连接符插入
 			}else{
-				/**
-				 * 当控件宽度不足以显示下一个单词时，使用“-”连接符连接单词换行显示
-				 */
-				// 如果不是复合词组
-				// p--;// 前推切割点
-				if(this.isLetter(str.charAt(p-2))){// 判断切割点前2位是否仍是英文字母
-					str=this.insertChar(str,p-1,"-");// 将连接符插入
-				}else{
-					p--;
-				}
+				str=this.insertChar(str,p-1," ");// 插入一个空格
 			}
+			
+			//删除复合词组换行功能
+//			// 得到切割点位置的单词及首末下标
+//			var word=this.getWordOfChar(str,p);
+//			/**
+//			 * 3.英文复合词组换行时，必须在复合词连接符处换行，如果控件不足以显示前半个单词，则将整个复合词组换行显示
+//			 */
+//			// 判断切割点所在单词是否是复合词组
+//			if(word.symPosition>=0){
+//				// 如果是复合词组
+//				// 足以显示前半个单词，将切割点移动到连接符后
+//				if(word.symPosition<p)
+//					p=word.symPosition+1;
+//				// 不足以显示前半个单词，且头部下标不为0，将切割点移动到单词头部
+//				else if(word.head>0){
+//					p=word.head;
+//				}
+//			}else{
+//				/**
+//				 * 当控件宽度不足以显示下一个单词时，使用“-”连接符连接单词换行显示
+//				 */
+//				// 如果不是复合词组
+//				// p--;// 前推切割点
+//				if(this.isLetter(str.charAt(p-2))){// 判断切割点前2位是否仍是英文字母
+//					str=this.insertChar(str,p-1,"-");// 将连接符插入
+//				}else{
+//					str=this.insertChar(str,p-1," ");// 插入一个空格
+////					p--;
+//				}
+//			}
 		}
 		// 使至少移动一位，避免因为表格宽度过小导致位移为零从而陷入死循环
 		if(p<=0) p=1;
